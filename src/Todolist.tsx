@@ -9,6 +9,7 @@ type TodolistPropsType = {
     filterTasks: (filter: filterValuesType) => void
     addTask: (title: string) => void
     changeStatus: (id: string, isDone: boolean) => void
+    filter: filterValuesType
 }
 
 export const Todolist = ({
@@ -17,7 +18,8 @@ export const Todolist = ({
                              removeTask,
                              filterTasks,
                              addTask,
-                             changeStatus, ...props
+                             changeStatus,
+                             filter,...props
                          }: TodolistPropsType) => {
 
     let [value, setValue] = useState<string>('')
@@ -75,9 +77,9 @@ export const Todolist = ({
                     </li>)}
                 </ul>
                 <div>
-                    <button onClick={filterAll}>All</button>
-                    <button onClick={filterActive}>Active</button>
-                    <button onClick={filterCompleted}>Completed</button>
+                    <button className={filter === 'all' ? 'active-filter' : ''} onClick={filterAll}>All</button>
+                    <button className={filter === 'active' ? 'active-filter' : ''} onClick={filterActive}>Active</button>
+                    <button className={filter === 'completed' ? 'active-filter' : ''} onClick={filterCompleted}>Completed</button>
                 </div>
             </div>
         </div>
