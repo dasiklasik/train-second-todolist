@@ -66,8 +66,9 @@ function App() {
 
     const removeTodolist = (todolistId: string) => {
       setTodolists(todolists.filter(tl => tl.id !== todolistId))
-        delete tasks[todolistId]
-        console.log(tasks)
+        let copyTasks = {...tasks}
+        delete copyTasks[todolistId]
+        setTasks(copyTasks)
     }
 
     const changeTodolistTitle = (todolistId: string, title: string) => {
