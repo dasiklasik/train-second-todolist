@@ -7,15 +7,20 @@
   margin-right: 50px;
 }
 
-.error {
-  border: 1px solid red;
+.activeFilter {
+  background: cornflowerblue;
+  color: white;
 }
 
-.error-message {
+.doneTask {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.error {
   color: red;
 }
 
-.active-filter {
-  background-color: aquamarine;
+.errorBorder {
+  border: 2px solid red;
 }
-
