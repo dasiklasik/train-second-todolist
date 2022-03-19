@@ -3,6 +3,10 @@ import {filterValuesType, taskType} from "./App";
 import './App.css'
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {Button, Checkbox, IconButton} from "@mui/material";
+import {Delete} from "@mui/icons-material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 type TodolistPropsType = {
     title: string
@@ -54,12 +58,14 @@ export const Todolist = ({
         }
 
         return (
-            <li key={t.id} className={t.isDone ? 'doneTask' : ''}>
-                <input type="checkbox" checked={t.isDone} onChange={onChangeCheckBox}/>
+            <div key={t.id} className={t.isDone ? 'doneTask' : ''}>
+                <Checkbox color={'secondary'} icon={<FavoriteBorderIcon/>} checkedIcon={<FavoriteIcon/>} checked={t.isDone} onChange={onChangeCheckBox}/>
                 {/*<span>{t.title}</span>*/}
                 <EditableSpan title={t.title} changeTitle={changeTaskTitleHandler}/>
-                <button onClick={onClickHandler}>x</button>
-            </li>)
+                <IconButton onClick={onClickHandler}>
+                    <Delete/>
+                </IconButton>
+            </div>)
     })
 
     const allFilter = () => changeFilter(todolistId, 'all')
@@ -83,17 +89,19 @@ export const Todolist = ({
     return (
         <div>
             <h3><EditableSpan title={title} changeTitle={changeTlTitleHandler}/>
-                <button onClick={removeTodolistHandler}>x</button>
+                <IconButton onClick={removeTodolistHandler}>
+                    <Delete/>
+                </IconButton>
             </h3>
             <AddItemForm addItem={addTaskItem}/>
-            <ul>
-                {tasksArray}
-            </ul>
             <div>
-                <button className={filter === 'all' ? 'activeFilter' : ''} onClick={allFilter}>All</button>
-                <button className={filter === 'active' ? 'activeFilter' : ''} onClick={activeFilter}>Active</button>
-                <button className={filter === 'completed' ? 'activeFilter' : ''} onClick={completedFilter}>Completed
-                </button>
+                {tasksArray}
+            </div>
+            <div>
+                <Button size={'small'} variant={'contained'} color={filter === 'all' ? 'secondary' : 'primary'} onClick={allFilter}>All</Button>
+                <Button size={'small'} variant={'contained'} color={filter === 'active' ? 'secondary' : 'primary'}  onClick={activeFilter}>Active</Button>
+                <Button size={'small'} variant={'contained'} color={filter === 'completed' ? 'secondary' : 'primary'} onClick={completedFilter}>Completed
+                </Button>
             </div>
         </div>
     )
