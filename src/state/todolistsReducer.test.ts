@@ -1,3 +1,4 @@
+import { v1 } from "uuid";
 import {todolistType} from "../App";
 import {
     addTodolistAC,
@@ -30,7 +31,7 @@ test('todolists reducer should remove todolist', () => {
 })
 
 test('todolists reducer should add todolist', () => {
-    const endState = todolistsReducer(state, addTodolistAC('title'))
+    const endState = todolistsReducer(state, addTodolistAC(v1(), 'title'))
 
     expect(endState.length).toBe(3)
     expect(endState[2].title).toBe('title')
