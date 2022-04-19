@@ -1,48 +1,43 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {TextField} from "@mui/material";
+import { TextField } from "@mui/material";
+import React, {useState, KeyboardEvent, ChangeEvent, useCallback} from "react";
 
-type EditableSpanPropsType = {
+type editableSpanPropsType = {
     title: string
-    changeTitle: (title: string) => void
+    onChange: (value: string) => void
 }
-export const EditableSpan = ({
-                                 title,
-                                 changeTitle,
-                                 ...props
-                             }: EditableSpanPropsType) => {
-    const [editMode, setEditMode] = useState(false)
-    const [value, setValue] = useState(title)
+export const EditableSpan = React.memo((props: editableSpanPropsType) => {
 
+    const [editMode, setEditmode] = useState(false)
+    const [title, setTitle] = useState('')
 
-    const changeInputValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.currentTarget.value)
+    const activateEditMode = () => {
+        setEditmode(true)
+        setTitle(props.title)
     }
 
-    const changeModeOnHandler = () => {
-        setEditMode(true)
-    }
+    const activateViewMode = useCallback(() => {
+        setEditmode(false)
+        props.onChange(title)
+    }, [props.onChange, setEditmode, title])
 
-    const changeModeOffHandler = () => {
-        setEditMode(false)
-        changeTitle(value)
-    }
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
+    }, [setTitle])
 
     const onEnterHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-            setEditMode(false)
-            changeTitle(value)
+        if (e.key === 'Enter') {
+            setEditmode(false)
+            props.onChange(title)
         }
     }
 
     return (
-        <>
-            {editMode ? <TextField
-                    variant="standard"
-                    value={value}
-                    onChange={changeInputValueHandler}
-                    onBlur={changeModeOffHandler}
-                    onKeyPress={onEnterHandler} autoFocus/>
-                : <span onDoubleClick={changeModeOnHandler}>{title}</span>}
-        </>
+
+        editMode ? <TextField onChange={onChangeHandler}
+                              value={title} onBlur={activateViewMode}
+                              autoFocus
+            onKeyPress={onEnterHandler}/> :
+            <span onDoubleClick={activateEditMode}>{props.title}</span>
+
     )
-}
+})

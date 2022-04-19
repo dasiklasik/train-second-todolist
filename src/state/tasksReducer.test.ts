@@ -1,46 +1,71 @@
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./tasksReducer";
-import {tasksStateType, todolistId1, todolistId2} from "../App";
+import {TasksType} from "../AppWithReducers";
 import {v1} from "uuid";
+import {
+    addTaskAC,
+    addTasksArrayAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    tasksReducer
+} from "./tasksReducer";
+import {todolistID1, todolistID2} from "./todolistsReducer";
 
-let state:tasksStateType
+let initialState: TasksType;
 
 beforeEach(() => {
-    return state = {
-        [todolistId1]: [
-            {id: v1(), title: 'HTML', isDone: true},
-            {id: v1(), title: 'CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: false},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'Redux', isDone: false},
+    return  initialState ={
+        [todolistID1]: [
+            {id: v1(), title: "HTML&CSS", isDone: true},
+            {id: v1(), title: "JS", isDone: true},
+            {id: v1(), title: "ReactJS", isDone: false},
+            {id: v1(), title: "Rest API", isDone: false},
+            {id: v1(), title: "GraphQL", isDone: false},
         ],
-        [todolistId2]: [
-            {id: v1(), title: 'milk', isDone: true},
-            {id: v1(), title: 'cheese', isDone: true},
-            {id: v1(), title: 'apples', isDone: false},
-        ],
+        [todolistID2]: [
+            {id: v1(), title: "HTML&CSS2", isDone: true},
+            {id: v1(), title: "JS2", isDone: true},
+            {id: v1(), title: "ReactJS2", isDone: false},
+            {id: v1(), title: "Rest API2", isDone: false},
+            {id: v1(), title: "GraphQL2", isDone: false},
+        ]
     }
 })
 
-test('tasks reducer should remove task', () => {
-    const endState = tasksReducer(state, removeTaskAC(todolistId1, state[todolistId1][0].id))
+test('task reducer should remove correct task', () => {
+    const endState = tasksReducer(initialState, removeTaskAC(todolistID1, initialState[todolistID1][0].id))
 
-    expect(endState[todolistId1][0].id).toBe(state[todolistId1][1].id)
+    expect(endState[todolistID2].length).toBe(5)
+    expect(endState[todolistID1].length).toBe(4)
+    expect(endState[todolistID1][0].title).toBe("JS")
 })
 
-test('tasks reducer should add new task', () => {
-    const endState = tasksReducer(state, addTaskAC(todolistId1, 'my'))
+test('task reducer should add task', () => {
+    const endState = tasksReducer(initialState, addTaskAC(todolistID1, 'other'))
 
-    expect(endState[todolistId1].length).toBe(6)
+    expect(endState[todolistID1][0].title).toBe('other')
 })
 
-test('tasks reducer should change task status', () => {
-    const endState = tasksReducer(state, changeTaskStatusAC(todolistId1, state[todolistId1][0].id, false))
 
-    expect(endState[todolistId1][0].isDone).toBe(false)
+test('task reducer should change task status', () => {
+    const endState = tasksReducer(initialState, changeTaskStatusAC(todolistID1,
+        initialState[todolistID1][0].id, false))
+
+    expect(endState[todolistID1][0].isDone).toBe(false)
 })
 
-test('tasks reducer should change task title', () => {
-    const endState = tasksReducer(state, changeTaskTitleAC(todolistId1, state[todolistId1][0].id, 'some title'))
 
-    expect(endState[todolistId1][0].title).toBe('some title')
+test('task reducer should change task title', () => {
+    const endState = tasksReducer(initialState, changeTaskTitleAC(todolistID1,
+        initialState[todolistID1][0].id, 'some title'))
+
+    expect(endState[todolistID1][0].title).toBe('some title')
+})
+
+test('task reducer should add tasks array', () => {
+
+    const todolistId3 = v1()
+
+    const endState = tasksReducer(initialState, addTasksArrayAC(todolistId3))
+
+    expect(endState[todolistId3]).toEqual([])
 })

@@ -1,32 +1,24 @@
 
-type StateType = {
+export type userType = {
     age: number
     childrenCount: number
     name: string
 }
-type ActionType = {
+
+type actionType = {
     type: string
     [key: string]: any
 }
 
-export const userReducer = (state: StateType, action: ActionType) => {
+export const userReducer = (state: userType, action: any) => {
     switch (action.type) {
-        case 'INCREMENT-AGE': {
-            let newState = {...state}
-            newState.age = newState.age + 1;
-            return newState;
-        }
-        case 'INCREMENT-CHILDREN-COUNT': {
-            let newState = {...state}
-            newState.childrenCount = newState.childrenCount + 1;
-            return newState;
-        }
-        case 'CHANGE-NAME': {
-            let newState = {...state}
-            newState.name = action.payload.name
-            return newState
-        }
+        case 'INCREMENT-AGE':
+            return {...state, age: state.age++}
+        case 'INCREMENT-CHILDREN-COUNT':
+            return {...state, childrenCount: state.childrenCount++}
+        case 'CHANGE-NAME':
+            return {...state, name: action.newName}
         default:
-            throw new Error("I don't understand this type")
+            return state
     }
 }
